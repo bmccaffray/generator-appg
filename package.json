@@ -1,0 +1,19 @@
+{
+  "name": "generator-appg",
+  "version": "1.0.0",
+  "description": "yo app generator - creates the initial files/structure for an app (readme, package, grunt)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bmccaffray/generator-appg.git"
+  },
+  "author": "brett mccaffray",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bmccaffray/generator-appg/issues"
+  },
+  "homepage": "https://github.com/bmccaffray/generator-appg"
+}
