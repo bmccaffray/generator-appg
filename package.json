@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/bmccaffray/generator-appg/issues"
   },
-  "homepage": "https://github.com/bmccaffray/generator-appg"
+  "homepage": "https://github.com/bmccaffray/generator-appg",
+  "dependencies": {
+    "yeoman-generator": "^0.17.2"
+  }
 }
