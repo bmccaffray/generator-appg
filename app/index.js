@@ -82,8 +82,32 @@ var AppgGenerator = yeoman.generators.Base.extend({
         }
 
         if(this.grunts){
-            //this.gruntfile.insertConfig("compass", "{ watch: { watch: true } }");
-            //this.npmInstall(['lodash'], { 'saveDev': true }, done);
+            this.gruntfile.insertConfig("clean", "{
+                    design: {
+                        expand: true,
+                        cwd: 'build/',
+                        src: ['*.html', 'css/*.css', 'images/*']
+                    },
+                    dist: {
+                        src: 'build/'
+                    }
+                }");
+            this.gruntfile.insertConfig("copy", "{
+                    design: {
+                        expand: true,
+                        cwd: '',
+                        src: ['*.html', 'css/*.css', 'images/*'],
+                        dest: 'build/',
+                        filter: 'isFile'
+                    },
+                    dist: {
+                        expand: true,
+                        cwd: '',
+                        src: ['images/*'],
+                        dest: 'build/',
+                        filter: 'isFile'
+                    }
+                }");
         }
     }
 });
