@@ -73,7 +73,8 @@ var AppgGenerator = yeoman.generators.Base.extend({
         if(this.adds.length > 0){
             for(var i = 0; i < this.adds.length; i++){
                 var done = this.async();
-                this.npmInstall(['lodash'], { 'saveDev': true }, done);
+                this.npmInstall(['grunt-browserify'], { 'saveDev': true }, done);
+                this.npmInstall(['debowerify'], { 'saveDev': true }, done);
             }
             // installingLodash: function() {
             //     var done = this.async();
