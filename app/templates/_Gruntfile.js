@@ -1,74 +1,38 @@
 'use strict';
 
 module.exports = function(grunt) {
-    // 1. All configuration goes here 
-    grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-        uglify: {
-            build: {
-                src: 'production.js',
-                dest: 'production.min.js'
+    grunt.initConfig({
+        clean: {
+            design: {
+                expand: true,
+                cwd: 'build/',
+                src: ['*.html', 'css/*.css', 'images/*']
+            },
+            dist: {
+                src: 'build/'
             }
         },
-
-        jshint: {
-            all: [
-                'Gruntfile.js',
-                '*.js']
-        },  
-
-        watch: {
-            // options: {
-            //     livereload: true,
-            // },
-            scripts: {
-                files: ['*.js'],
-                tasks: ['concat', 'uglify', 'jshint'],
-                options: {
-                    spawn: false,
-                    //livereload: true,
-                },
+        copy: {
+            design: {
+                expand: true,
+                cwd: '',
+                src: ['*.html', 'css/*.css', 'images/*'],
+                dest: 'build/',
+                filter: 'isFile'
+            },
+            dist: {
+                expand: true,
+                cwd: '',
+                src: ['images/*'],
+                dest: 'build/',
+                filter: 'isFile'
             }
-
-            // css: {
-            //     files: ['css/*.scss'],
-            //     tasks: ['sass'],
-            //     options: {
-            //         spawn: false,
-            //     }
-            // }
-        }
-
-        // add to watch, loadNpmTasks & registerTask
-        // sass: {
-        //     dist: {
-        //         options: {
-        //             style: 'compressed'
-        //         },
-        //         files: {
-        //             'css/build/global.css': 'css/global.scss'
-        //         }
-        //     } 
-        // }
-        
-        // add to loadNpmTasks & registerTask
-        // imagemin: {
-        //    dynamic: {
-        //        files: [{
-        //            expand: true,
-        //            cwd: 'images/',
-        //            src: ['**/*.{png,jpg,gif}'],
-        //            dest: 'images/build/'
-        //        }]
-        //    }
-        // }
-
+        },
     });
 
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-
-    grunt.registerTask('default', ['uglify', 'jshint', 'watch']);
+    grunt.registerTask('build:design', ['clean:design', 'sass:build', 'copy:design']);
+    grunt.registerTask('design', ['build:design', 'express:design', 'watch:design']);
+    grunt.registerTask('build:dist', ['clean:dist', 'sass:dist', 'htmlmin:dist', 'cssmin:dist', 'copy:dist']);
 };
