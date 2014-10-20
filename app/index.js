@@ -38,11 +38,14 @@ var AppgGenerator = yeoman.generators.Base.extend({
                     name: 'Watch',
                     value: 'grunt-contrib-watch'
                 }, {
+                    name: 'HTML Min',
+                    value: 'grunt-contrib-htmlmin'
+                }, {
                     name: 'CSS Min',
                     value: 'grunt-contrib-cssmin'
                 }, {
-                    name: 'HTML Min',
-                    value: 'grunt-contrib-htmlmin'
+                    name: 'Sass',
+                    value: 'grunt-contrib-sass'
                 }, {
                     name: 'JSHint',
                     value: 'grunt-contrib-jshint'
@@ -62,30 +65,30 @@ var AppgGenerator = yeoman.generators.Base.extend({
     },
 
     fileStructure: function(){
-        if(this.addGrunt){
-            this.copy('_Gruntfile.js', 'Gruntfile.js');
-        }
+        this.copy('_Gruntfile.js', 'Gruntfile.js');
+        this.copy('_package.json', 'package.json');
     },
 
     installs: function(){
         this.npmInstall(['grunt'], { 'saveDev': true }, done);
+        this.npmInstall(['grunt-contrib-clean'], { 'saveDev': true }, done);
+        this.npmInstall(['grunt-contrib-copy'], { 'saveDev': true }, done);
 
         if(this.adds.length > 0){
             for(var i = 0; i < this.adds.length; i++){
                 var done = this.async();
-                this.npmInstall(['grunt-browserify'], { 'saveDev': true }, done);
+                this.npmInstall([this.adds[i]], { 'saveDev': true }, done);
+            }
+
+            if(this.adds.indexOf('grunt-browserify') != '-1'){
                 this.npmInstall(['debowerify'], { 'saveDev': true }, done);
             }
-            // installingLodash: function() {
-            //     var done = this.async();
-            //     this.npmInstall(['lodash'], { 'saveDev': true }, done);
-            // }
         }
 
-        if(this.grunts){
+        //if(this.adds.length > 0){
             //this.gruntfile.insertConfig("compass", "{ watch: { watch: true } }");
             //this.npmInstall(['lodash'], { 'saveDev': true }, done);
-        }
+        //}
     }
 });
 
