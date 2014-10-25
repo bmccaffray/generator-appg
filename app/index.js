@@ -65,14 +65,19 @@ var AppgGenerator = yeoman.generators.Base.extend({
     },
 
     fileStructure: function(){
-        this.copy('_Gruntfile.js', 'Gruntfile.js');
+        //this.copy('_Gruntfile.js', 'Gruntfile.js');
         //this.copy('_package.json', 'package.json');
     },
 
     installs: function(){
+        var gruntString = "";
+        var gruntRegString = "";
+        var gruntRegDistString = "";
+
         this.npmInstall(['grunt'], { 'saveDev': true }, done);
         this.npmInstall(['grunt-contrib-clean'], { 'saveDev': true }, done);
         this.npmInstall(['grunt-contrib-copy'], { 'saveDev': true }, done);
+        this.npmInstall(['matchdep'], { 'saveDev': true }, done);
 
         if(this.adds.length > 0){
             for(var i = 0; i < this.adds.length; i++){
@@ -87,43 +92,67 @@ var AppgGenerator = yeoman.generators.Base.extend({
 
         //write gruntfile
 
-        var data = ["'use strict';",
-            "module.exports = function(grunt) {",
-                "require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);",
+        if(this.adds.indexOf('grunt-browserify') != '-1'){
+            gruntString += "browserify: {" +
+                                "build: {" +
+                                    "options: {" +
+                                        "transform: ['debowerify', 'browserify-ngannotate']," +
+                                        "debug: true" +
+                                    "}," +
+                                    "src: ['app/js/**/*.js']," +
+                                    "dest: 'build/bundle.js'" +
+                                "}," +
+                                "dist: {" +
+                                    "options: {" +
+                                        "transform: ['debowerify']," +
+                                        "debug: true" +
+                                    "}," +
+                                    "src: ['test/angular/**/*test.js']," +
+                                    "dest: 'test/angular-testbundle.js'" +
+                                "}" +
+                            "},";
 
-                "grunt.initConfig({",
-                    "clean: {",
-                        "design: {",
-                            "expand: false,",
-                            "cwd: 'build/',",
-                            "src: ['*.html', 'css/*.css', 'images/*']",
-                        "},",
-                        "dist: {",
-                            "src: 'build/'",
-                        "}",
-                    "},",
-                    "copy: {",
-                        "design: {",
-                            "expand: true,",
-                            "cwd: '',",
-                            "src: ['*.html', 'css/*.css', 'images/*'],",
-                            "dest: 'build/',",
-                            "filter: 'isFile'",
-                        "},",
-                        "dist: {",
-                            "expand: true,",
-                            "cwd: '',",
-                            "src: ['images/*'],",
-                            "dest: 'build/',",
-                            "filter: 'isFile'",
-                        "}",
-                    "},",
-                "});",
+            gruntRegString += "'browserify:build', ";
+            gruntRegDistString += "'browserify:dist', ";
+        }
 
-                "grunt.registerTask('build:design', ['clean:design', 'sass:build', 'copy:design']);",
-                "grunt.registerTask('design', ['build:design', 'express:design', 'watch:design']);",
-                "grunt.registerTask('build:dist', ['clean:dist', 'sass:dist', 'htmlmin:dist', 'cssmin:dist', 'copy:dist']);",
-            "};"];
+        var data = "'use strict';" +
+            "module.exports = function(grunt) {" +
+                "require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);" +
+
+                "grunt.initConfig({"
+                    + gruntString +
+                    "clean: {" +
+                        "design: {" +
+                            "expand: false," +
+                            "cwd: 'build/'," +
+                            "src: ['*.html', 'css/*.css', 'images/*']" +
+                        "}," +
+                        "dist: {" +
+                            "src: 'build/'" +
+                        "}" +
+                    "}," +
+                    "copy: {" +
+                        "design: {" +
+                            "expand: true," +
+                            "cwd: ''," +
+                            "src: ['*.html', 'css/*.css', 'images/*']," +
+                            "dest: 'build/'," +
+                            "filter: 'isFile'" +
+                        "}," +
+                        "dist: {" +
+                            "expand: true," +
+                            "cwd: ''," +
+                            "src: ['images/*']," +
+                            "dest: 'build/'," +
+                            "filter: 'isFile'" +
+                        "}" +
+                    "}," +
+                "});" +
+
+                "grunt.registerTask('build', [" + gruntRegString + "'clean:design', 'sass:build', 'copy:design'], ['build:design', 'express:design', 'watch:design']);" +
+                "grunt.registerTask('dist', [" + gruntRegDistString + "'clean:dist', 'sass:dist', 'htmlmin:dist', 'cssmin:dist', 'copy:dist']);" +
+            "};";
 
         fs.writeFileSync('./Gruntfile.js', data);
 
