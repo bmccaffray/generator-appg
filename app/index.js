@@ -123,7 +123,7 @@ var AppgGenerator = yeoman.generators.Base.extend({
                 "grunt.initConfig({"
                     + gruntString +
                     "clean: {" +
-                        "design: {" +
+                        "build: {" +
                             "expand: false," +
                             "cwd: 'build/'," +
                             "src: ['*.html', 'css/*.css', 'images/*']" +
@@ -133,7 +133,7 @@ var AppgGenerator = yeoman.generators.Base.extend({
                         "}" +
                     "}," +
                     "copy: {" +
-                        "design: {" +
+                        "build: {" +
                             "expand: true," +
                             "cwd: ''," +
                             "src: ['*.html', 'css/*.css', 'images/*']," +
@@ -150,8 +150,8 @@ var AppgGenerator = yeoman.generators.Base.extend({
                     "}," +
                 "});" +
 
-                "grunt.registerTask('build', [" + gruntRegString + "'clean:design', 'sass:build', 'copy:design'], ['build:design', 'express:design', 'watch:design']);" +
-                "grunt.registerTask('dist', [" + gruntRegDistString + "'clean:dist', 'sass:dist', 'htmlmin:dist', 'cssmin:dist', 'copy:dist']);" +
+                "grunt.registerTask('build', [" + gruntRegString + "'clean:build', 'copy:build']);" +
+                "grunt.registerTask('dist', [" + gruntRegDistString + "'clean:dist', 'copy:dist']);" +
             "};";
 
         fs.writeFileSync('./Gruntfile.js', data);
