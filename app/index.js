@@ -23,6 +23,15 @@ var AppgGenerator = yeoman.generators.Base.extend({
 
         var prompts = [{
             type: 'checkbox',
+            name: 'init',
+            message: 'Project Name:',
+            choices: [{
+                    name: 'Express Server',
+                    value: 'grunt-express-server'
+                }],
+            default: ''
+        }, {
+            type: 'checkbox',
             name: 'adds',
             message: 'Select which plugins/modules you wish to add to your project:',
             choices: [{
