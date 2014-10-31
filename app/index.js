@@ -22,6 +22,36 @@ var AppgGenerator = yeoman.generators.Base.extend({
         var done = this.async();
 
         var prompts = [{
+            type: 'input',
+            name: 'initName',
+            message: 'Name:',
+            default: ''
+        }, {
+            type: 'input',
+            name: 'initVersion',
+            message: 'Version:',
+            default: ''
+        }, {
+            type: 'input',
+            name: 'initDesc',
+            message: 'Description:',
+            default: ''
+        }, {
+            type: 'input',
+            name: 'initAuthor',
+            message: 'Author:',
+            default: ''
+        }, {
+            type: 'input',
+            name: 'initKeys',
+            message: 'Keywords:',
+            default: ''
+        }, {
+            type: 'input',
+            name: 'initLicense',
+            message: 'License:',
+            default: 'MIT'
+        }, {
             type: 'checkbox',
             name: 'adds',
             message: 'Select which plugins/modules you wish to add to your project:',
