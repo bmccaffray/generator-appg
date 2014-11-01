@@ -85,6 +85,12 @@ var AppgGenerator = yeoman.generators.Base.extend({
 
         this.prompt(prompts, function (props){
             this.adds = props.adds;
+            this.initName = props.initName;
+            this.initVersion = props.initVersion;
+            this.initDesc = props.initDesc;
+            this.initAuthor = props.initAuthor;
+            this.initKeys = props.initKeys;
+            this.initLicense = props.initLicense;
 
             done();
         }.bind(this));
@@ -95,6 +101,13 @@ var AppgGenerator = yeoman.generators.Base.extend({
     },
 
     fileStructure: function(){
+        var packageData = '{' +
+                    '"name": "' + initName + '", ' +
+                    '"version": "' + initVersion + '", ' +
+                    '"name": "' + test + '"' +
+                    '}';
+
+        fs.writeFileSync('./package.json', packageData);
         //this.copy('_Gruntfile.js', 'Gruntfile.js');
         //this.copy('_package.json', 'package.json');
     },
